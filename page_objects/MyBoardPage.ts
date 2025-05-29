@@ -17,24 +17,30 @@ export class MyBoardPage {
 	// Aca interactuamos con los elementos
 	// Método para hacer clic en "Inventario"
 	async clickInventory() {
-		const isDesktopVisible = await this.inventoryDesktopHref.isVisible();
-		const inventory = isDesktopVisible
-			? this.inventoryDesktopHref
-			: this.inventoryMobileHref;
-		console.log(
-			`Haciendo clic en el inventario: ${
-				isDesktopVisible ? "Desktop" : "Mobile"
-			}`
-		);
-		await expect(inventory).toBeVisible();
-		await expect(inventory).toBeEnabled();
-		await inventory.click();
-		await this.waitForNetworkAndLoad(); // Esperar a que la acción se complete
+		try {
+			const isDesktopVisible = await this.inventoryDesktopHref.isVisible();
+			const inventory = isDesktopVisible
+				? this.inventoryDesktopHref
+				: this.inventoryMobileHref;
+			console.log(
+				`Haciendo clic en el inventario: ${
+					isDesktopVisible ? "Desktop" : "Mobile"
+				}`
+			);
+			await expect(inventory).toBeVisible();
+			await expect(inventory).toBeEnabled();
+			await inventory.click();
+			await this.waitForNetworkAndLoad(); // Esperar a que la acción se complete
+		} catch (error) {
+			throw new Error(`Error al acceder al inventario: ${error.message}`);
+		}
 	}
 
-	// Garantiza que la página esté completamente lista para interactuar:
+	// Este método solo pueden ser accedido y utilizado dentro de la propia clase donde está definido.
+	// Se usa para encapsular la lógica interna y proteger funciones auxiliares.
 	private async waitForNetworkAndLoad() {
 		await this.page.waitForURL("**/inventario");
-		await this.page.waitForTimeout(500); // Pequeña pausa adicional
+		// Espera adicional para asegurar que la página esté completamente cargada
+		await this.page.waitForLoadState("load");
 	}
 }

@@ -6,7 +6,7 @@ test("negotiator", async ({ page }) => {
 	// LoginPage
 	const loginPage = new LoginPage(page);
 	await loginPage.navegateToLogin();
-	await loginPage.fillMail();
+	await loginPage.fillEmail();
 	await loginPage.fillPassword();
 	await loginPage.clickLogin();
 
