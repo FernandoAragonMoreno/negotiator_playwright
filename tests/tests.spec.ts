@@ -5,10 +5,7 @@ import { MyBoardPage } from "../page_objects/MyBoardPage";
 test("negotiator", async ({ page }) => {
 	// LoginPage
 	const loginPage = new LoginPage(page);
-	await loginPage.navegateToLogin();
-	await loginPage.fillEmail();
-	await loginPage.fillPassword();
-	await loginPage.clickLogin();
+	await loginPage.login();
 
 	// MyBoardPage
 	const myBoardPage = new MyBoardPage(page);

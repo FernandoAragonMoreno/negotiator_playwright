@@ -18,7 +18,7 @@ export class LoginPage {
 	}
 
 	// Aca interactuamos con los elementos
-	// Método Unificado para el Login
+	// Método para navegar a la página de inicio de sesión
 	async navegateToLogin() {
 		try {
 			const url = process.env.URL_NEGOTIATOR;
@@ -33,10 +33,17 @@ export class LoginPage {
 		}
 	}
 
+	// Método unificado para login
+	async login(email?: string, password?: string) {
+		await this.navegateToLogin();
+		await this.fillEmail(email);
+		await this.fillPassword(password);
+		await this.clickLogin();
+	}
+
 	// Método para llenar el campo "Correo"
-	async fillEmail() {
+	private async fillEmail(email = process.env.EMAIL) {
 		try {
-			const email = process.env.EMAIL;
 			if (!email)
 				throw new Error("La variable de entorno MAIL no está definida.");
 			await this.validateField(this.emailInput);
@@ -47,9 +54,8 @@ export class LoginPage {
 	}
 
 	// Método para llenar el campo "Contraseña"
-	async fillPassword() {
+	private async fillPassword(password = process.env.PASSWORD) {
 		try {
-			const password = process.env.PASSWORD;
 			if (!password)
 				throw new Error("La variable de entorno PASSWORD no está definida.");
 			await this.validateField(this.passwordInput);
@@ -67,7 +73,7 @@ export class LoginPage {
 		await expect(field).toBeEmpty();
 	}
 
-	async clickLogin() {
+	private async clickLogin() {
 		try {
 			await this.validateButton(this.loginButton);
 			await this.loginButton.click();
