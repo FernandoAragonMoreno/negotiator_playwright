@@ -39,8 +39,14 @@ export class MyBoardPage {
 	// Este método solo pueden ser accedido y utilizado dentro de la propia clase donde está definido.
 	// Se usa para encapsular la lógica interna y proteger funciones auxiliares.
 	private async waitForNetworkAndLoad() {
-		await this.page.waitForURL("**/inventario");
-		// Espera adicional para asegurar que la página esté completamente cargada
-		await this.page.waitForLoadState("load");
+		try {
+			await this.page.waitForURL("**/inventario");
+			// Espera adicional para asegurar que la página esté completamente cargada
+			await this.page.waitForLoadState("load");
+		} catch (error) {
+			throw new Error(
+				`Error al esperar la carga de la página: ${error.message}`
+			);
+		}
 	}
 }

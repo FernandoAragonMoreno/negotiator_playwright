@@ -35,10 +35,14 @@ export class LoginPage {
 
 	// Método unificado para login
 	async login(email?: string, password?: string) {
-		await this.navegateToLogin();
-		await this.fillEmail(email);
-		await this.fillPassword(password);
-		await this.clickLogin();
+		try {
+			await this.navegateToLogin();
+			await this.fillEmail(email);
+			await this.fillPassword(password);
+			await this.clickLogin();
+		} catch (error) {
+			throw new Error(`Error en el proceso de login: ${error.message}`);
+		}
 	}
 
 	// Método para llenar el campo "Correo"
@@ -68,9 +72,13 @@ export class LoginPage {
 	// Este método solo pueden ser accedido y utilizado dentro de la propia clase donde está definido.
 	// Se usa para encapsular la lógica interna y proteger funciones auxiliares.
 	private async validateField(field: Locator) {
-		await expect(field).toBeVisible();
-		await expect(field).toBeEditable();
-		await expect(field).toBeEmpty();
+		try {
+			await expect(field).toBeVisible();
+			await expect(field).toBeEditable();
+			await expect(field).toBeEmpty();
+		} catch (error) {
+			throw new Error(`Error al validar el campo: ${error.message}`);
+		}
 	}
 
 	private async clickLogin() {
@@ -86,15 +94,25 @@ export class LoginPage {
 	// Este método solo pueden ser accedido y utilizado dentro de la propia clase donde está definido.
 	// Se usa para encapsular la lógica interna y proteger funciones auxiliares.
 	private async validateButton(button: Locator) {
-		await expect(button).toBeVisible();
-		await expect(button).toBeEnabled();
+		try {
+			await expect(button).toBeVisible();
+			await expect(button).toBeEnabled();
+		} catch (error) {
+			throw new Error(`Error al validar el botón: ${error.message}`);
+		}
 	}
 
 	// Este método solo pueden ser accedido y utilizado dentro de la propia clase donde está definido.
 	// Se usa para encapsular la lógica interna y proteger funciones auxiliares.
 	private async waitForNetworkAndLoad() {
-		await this.page.waitForURL("**/mi-tablero");
-		// Espera adicional para asegurar que la página esté completamente cargada
-		await this.page.waitForLoadState("load");
+		try {
+			await this.page.waitForURL("**/mi-tablero");
+			// Espera adicional para asegurar que la página esté completamente cargada
+			await this.page.waitForLoadState("load");
+		} catch (error) {
+			throw new Error(
+				`Error al esperar la carga de la página: ${error.message}`
+			);
+		}
 	}
 }
