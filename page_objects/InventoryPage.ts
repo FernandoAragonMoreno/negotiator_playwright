@@ -36,7 +36,13 @@ export class InventoryPage {
 			await this.page.waitForLoadState("load");
 			await expect(this.inventoryHabi).toBeVisible();
 			await expect(this.inventoryHabi).toBeEnabled();
-			await this.inventoryHabi.click();
+			// Solo haz clic si NO está activo
+			const isActive = await this.inventoryHabi.evaluate((el) =>
+				el.classList.contains("active")
+			);
+			if (!isActive) {
+				await this.inventoryHabi.click();
+			}
 		} catch (error) {
 			throw new Error(`Error al seleccionar Habi: ${error.message}`);
 		}
