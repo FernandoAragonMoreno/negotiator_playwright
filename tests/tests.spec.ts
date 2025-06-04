@@ -18,4 +18,5 @@ test("negotiator", async ({ page }) => {
 	await inventoryPage.selectHabi();
 	await inventoryPage.clickShowResults();
 	await inventoryPage.listTitles();
+	await inventoryPage.clickRandomTitle();
 });
