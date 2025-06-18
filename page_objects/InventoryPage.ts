@@ -13,7 +13,7 @@ export class InventoryPage {
 	constructor(page: Page) {
 		this.page = page;
 		this.filter = page.getByTestId("TuneIcon");
-		this.inventoryHabi = page.locator("div.sc-gwZKzw.pUyOn").nth(14);
+		this.inventoryHabi = page.locator('div[class="sc-dAEZTx hDmaNl"]').nth(14);
 		this.showResults = page.getByRole("button", { name: "Mostrar resultados" });
 		this.titleLocation = page.locator("p.content__title-location");
 	}
