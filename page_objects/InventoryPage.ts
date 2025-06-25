@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from "@playwright/test";
-
-export class InventoryPage {
+import { BasePage } from "./BasePage";
+export class InventoryPage extends BasePage {
 	// Locators
 	private readonly page: Page;
 	private readonly filter: Locator;
@@ -10,12 +10,13 @@ export class InventoryPage {
 	private readonly searchCityColonyNID: Locator;
 	private readonly foundNID: Locator;
 	private readonly card: Locator;
-	private readonly animation: Locator;
+	protected readonly animation: Locator;
 	//private readonly nid: Locator;
 
 	// Siempre que se realice un new InventoryPage() se ejecutará el constructor
 	// Colocamos Solo la localización de los elementos
 	constructor(page: Page) {
+		super(page); // Llamar al constructor de la clase base si es necesario
 		this.page = page;
 		this.filter = page.getByTestId("TuneIcon");
 		this.inventoryHabi = page.locator('div[class="sc-dAEZTx hDmaNl"]').nth(14);
@@ -29,16 +30,6 @@ export class InventoryPage {
 	}
 
 	// Aca interactuamos con los elementos
-	async closeAnimation() {
-		try {
-			await expect(this.animation).toBeVisible();
-			await this.animation.click();
-			await expect(this.animation).not.toBeVisible();
-		} catch (error) {
-			throw new Error(`Error al cerrar la animación: ${error.message}`);
-		}
-	}
-
 	// Método para hacer click en Filtros
 	async clickFilter() {
 		try {

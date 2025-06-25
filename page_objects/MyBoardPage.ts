@@ -1,15 +1,16 @@
 import { expect, Locator, Page } from "@playwright/test";
-
-export class MyBoardPage {
+import { BasePage } from "./BasePage";
+export class MyBoardPage extends BasePage {
 	// Locators
 	private readonly page: Page;
 	private readonly inventoryDesktopHref: Locator;
 	private readonly inventoryMobileHref: Locator;
-	private readonly animation: Locator;
+	protected readonly animation: Locator;
 
 	// Siempre que se realice un new MyBoardPage() se ejecutará el constructor
 	// Colocamos Solo la localización de los elementos
 	constructor(page: Page) {
+		super(page); // Llamar al constructor de la clase base si es necesario
 		this.page = page;
 		this.inventoryDesktopHref = page.getByTestId("menu-desktop-Inventario");
 		this.inventoryMobileHref = page.getByTestId("mobile-Inventario-route");
@@ -17,17 +18,6 @@ export class MyBoardPage {
 	}
 
 	// Aca interactuamos con los elementos
-	// Método para cerrar la animación de carga
-	async closeAnimation() {
-		try {
-			await expect(this.animation).toBeVisible();
-			await this.animation.click();
-			await expect(this.animation).not.toBeVisible();
-		} catch (error) {
-			throw new Error(`Error al cerrar la animación: ${error.message}`);
-		}
-	}
-
 	// Método para hacer clic en "Inventario"
 	async clickInventory() {
 		try {
