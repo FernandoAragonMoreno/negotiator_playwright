@@ -7,6 +7,11 @@ export class InventoryPage {
 	private readonly inventoryHabi: Locator;
 	private readonly showResults: Locator;
 	private readonly titleLocation: Locator;
+	private readonly searchCityColonyNID: Locator;
+	private readonly foundNID: Locator;
+	private readonly card: Locator;
+	private readonly animation: Locator;
+	//private readonly nid: Locator;
 
 	// Siempre que se realice un new InventoryPage() se ejecutará el constructor
 	// Colocamos Solo la localización de los elementos
@@ -16,9 +21,24 @@ export class InventoryPage {
 		this.inventoryHabi = page.locator('div[class="sc-dAEZTx hDmaNl"]').nth(14);
 		this.showResults = page.getByRole("button", { name: "Mostrar resultados" });
 		this.titleLocation = page.locator("p.content__title-location");
+		this.searchCityColonyNID = page.getByPlaceholder("Ciudad, Colonia, NID");
+		this.foundNID = page.locator('div[class="sc-ZbTNT dAFDDv"]');
+		this.card = page.locator("div#property-64150");
+		this.animation = page.getByTestId("CloseRoundedIcon");
+		//this.nid = page.getByTestId("customBadge-container").nth(1);
 	}
 
 	// Aca interactuamos con los elementos
+	async closeAnimation() {
+		try {
+			await expect(this.animation).toBeVisible();
+			await this.animation.click();
+			await expect(this.animation).not.toBeVisible();
+		} catch (error) {
+			throw new Error(`Error al cerrar la animación: ${error.message}`);
+		}
+	}
+
 	// Método para hacer click en Filtros
 	async clickFilter() {
 		try {
@@ -78,6 +98,7 @@ export class InventoryPage {
 		}
 	}
 
+	// Método para hacer clic en un título aleatorio
 	async clickRandomTitle() {
 		try {
 			await this.page.waitForLoadState("load");
@@ -94,6 +115,73 @@ export class InventoryPage {
 		} catch (error) {
 			throw new Error(
 				`Error al hacer clic en un título aleatorio: ${error.message}`
+			);
+		}
+	}
+
+	// Método para buscar por Ciudad, Colonia o NID
+	async searchByCityColonyNidParOpcionA() {
+		try {
+			const nid = process.env.NidParOpcionA;
+			if (!nid) {
+				throw new Error(
+					"La variable de entorno NID_PAR_OPCION_A no está definida."
+				);
+			}
+			await this.page.waitForLoadState("load");
+			await expect(this.searchCityColonyNID).toBeVisible();
+			await expect(this.searchCityColonyNID).toBeEditable();
+			await this.searchCityColonyNID.fill(nid);
+			// Espera a que los resultados se actualicen
+			await this.page.waitForLoadState("load");
+		} catch (error) {
+			throw new Error(
+				`Error al buscar por Ciudad, Colonia o NID: ${error.message}`
+			);
+		}
+	}
+
+	// Método para hacer clic en el NID buscado
+	async clickOnSearchedNID() {
+		try {
+			await this.page.waitForLoadState("load");
+			await expect(this.foundNID).toBeVisible();
+			await expect(this.foundNID).toBeEnabled();
+			await this.foundNID.click();
+		} catch (error) {
+			throw new Error(
+				`Error al hacer clic en el NID buscado: ${error.message}`
+			);
+		}
+	}
+
+	// Método para hacer clic en una tarjeta específica
+	async clickOnCard() {
+		try {
+			await this.page.waitForLoadState("load");
+			await expect(this.card).toBeVisible();
+			await expect(this.card).toBeEnabled();
+			await this.card.click();
+		} catch (error) {
+			throw new Error(`Error al hacer clic en la tarjeta: ${error.message}`);
+		}
+	}
+
+	// Método para verificar el primer modal de chapa electrónica
+	async verifyFirstModalLock() {
+		try {
+			// Espera a que se abra una nueva página (ventana/modal)
+			const [newPage] = await Promise.all([
+				this.page.context().waitForEvent("page"),
+				// Aquí deberías realizar la acción que abre la nueva ventana/modal
+				await this.clickOnCard(),
+			]);
+			await newPage.waitForLoadState("load");
+			// Verifica el NID en la nueva página
+			await expect(newPage).toHaveURL(/.*\/propiedad\/64150/);
+		} catch (error) {
+			throw new Error(
+				`Error al verificar el primer modal de chapa electrónica: ${error.message}`
 			);
 		}
 	}
