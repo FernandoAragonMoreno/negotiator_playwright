@@ -20,7 +20,7 @@ test("negotiator con filtro - Tipo de inventario Habi", async ({ page }) => {
 	await inventoryPage.selectHabi();
 	await inventoryPage.clickShowResults();
 	await inventoryPage.listTitles();
-	await inventoryPage.clickRandomTitle();
+	await inventoryPage.clickRandomCard();
 });
 
 test("negotiator por NID", async ({ page }) => {
@@ -36,7 +36,7 @@ test("negotiator por NID", async ({ page }) => {
 	// InventoryPage
 	const inventoryPage = new InventoryPage(page);
 	await inventoryPage.closeAnimation();
-	await inventoryPage.searchByCityColonyNidParOpcionA();
+	await inventoryPage.searchByCityColonyNidParOptionA();
 	await inventoryPage.clickOnSearchedNID();
 	await inventoryPage.verifyFirstModalLock();
 });

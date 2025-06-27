@@ -6,11 +6,11 @@ export class InventoryPage extends BasePage {
 	private readonly filter: Locator;
 	private readonly inventoryHabi: Locator;
 	private readonly showResults: Locator;
+	private readonly card: Locator;
 	private readonly titleLocation: Locator;
 	private readonly searchCityColonyNID: Locator;
 	private readonly foundNID: Locator;
-	private readonly card: Locator;
-	protected readonly animation: Locator;
+	private readonly specificCard: Locator;
 	//private readonly nid: Locator;
 
 	// Siempre que se realice un new InventoryPage() se ejecutará el constructor
@@ -21,11 +21,11 @@ export class InventoryPage extends BasePage {
 		this.filter = page.getByTestId("TuneIcon");
 		this.inventoryHabi = page.locator('div[class="sc-dAEZTx hDmaNl"]').nth(14);
 		this.showResults = page.getByRole("button", { name: "Mostrar resultados" });
+		this.card = page.getByTestId("wrapper-card");
 		this.titleLocation = page.locator("p.content__title-location");
 		this.searchCityColonyNID = page.getByPlaceholder("Ciudad, Colonia, NID");
 		this.foundNID = page.locator('div[class="sc-ZbTNT dAFDDv"]');
-		this.card = page.locator("div#property-64150");
-		this.animation = page.getByTestId("CloseRoundedIcon");
+		this.specificCard = page.locator("div#property-64150");
 		//this.nid = page.getByTestId("customBadge-container").nth(1);
 	}
 
@@ -78,7 +78,7 @@ export class InventoryPage extends BasePage {
 		try {
 			await this.page.waitForLoadState("load");
 			// Espera a que al menos uno sea visible
-			await expect(this.titleLocation.first()).toBeVisible();
+			await expect(this.card.first()).toBeVisible();
 			const titles = await this.titleLocation.allTextContents();
 			console.log("Total de propiedades:", titles.length);
 			for (const title of titles) {
@@ -89,20 +89,25 @@ export class InventoryPage extends BasePage {
 		}
 	}
 
-	// Método para hacer clic en un título aleatorio
-	async clickRandomTitle() {
+	// Método para hacer clic en una tarjeta aleatoria
+	async clickRandomCard() {
 		try {
 			await this.page.waitForLoadState("load");
-			await expect(this.titleLocation.first()).toBeVisible();
+			await expect(this.card.first()).toBeVisible();
 			const titles = await this.titleLocation.allTextContents();
 			if (titles.length === 0) {
 				throw new Error("No se encontraron títulos para seleccionar.");
 			}
 			const randomIndex = Math.floor(Math.random() * titles.length);
+			const id = await this.card.nth(randomIndex).getAttribute("id");
+			// Extrae solo los dígitos
+			const cardID = id?.match(/\d+/)?.[0];
 			console.log(
-				`Seleccionando el título #${randomIndex + 1}: ${titles[randomIndex]}`
+				`Seleccionando el título # ${randomIndex + 1}: ${
+					titles[randomIndex]
+				} (card ID: ${cardID})`
 			);
-			await this.titleLocation.nth(randomIndex).click();
+			await this.card.nth(randomIndex).click();
 		} catch (error) {
 			throw new Error(
 				`Error al hacer clic en un título aleatorio: ${error.message}`
@@ -111,12 +116,12 @@ export class InventoryPage extends BasePage {
 	}
 
 	// Método para buscar por Ciudad, Colonia o NID
-	async searchByCityColonyNidParOpcionA() {
+	async searchByCityColonyNidParOptionA() {
 		try {
-			const nid = process.env.NidParOpcionA;
+			const nid = process.env.NidParOptionA;
 			if (!nid) {
 				throw new Error(
-					"La variable de entorno NID_PAR_OPCION_A no está definida."
+					"La variable de entorno NID_PAR_OPCIÓN_A no está definida."
 				);
 			}
 			await this.page.waitForLoadState("load");
@@ -147,12 +152,12 @@ export class InventoryPage extends BasePage {
 	}
 
 	// Método para hacer clic en una tarjeta específica
-	async clickOnCard() {
+	async clickOnSpecificCard() {
 		try {
 			await this.page.waitForLoadState("load");
-			await expect(this.card).toBeVisible();
-			await expect(this.card).toBeEnabled();
-			await this.card.click();
+			await expect(this.specificCard).toBeVisible();
+			await expect(this.specificCard).toBeEnabled();
+			await this.specificCard.click();
 		} catch (error) {
 			throw new Error(`Error al hacer clic en la tarjeta: ${error.message}`);
 		}
@@ -165,7 +170,7 @@ export class InventoryPage extends BasePage {
 			const [newPage] = await Promise.all([
 				this.page.context().waitForEvent("page"),
 				// Aquí deberías realizar la acción que abre la nueva ventana/modal
-				await this.clickOnCard(),
+				await this.clickOnSpecificCard(),
 			]);
 			await newPage.waitForLoadState("load");
 			// Verifica el NID en la nueva página

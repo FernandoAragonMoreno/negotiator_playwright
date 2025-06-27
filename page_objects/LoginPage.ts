@@ -19,7 +19,7 @@ export class LoginPage {
 
 	// Aca interactuamos con los elementos
 	// Método para navegar a la página de inicio de sesión
-	async navegateToLogin() {
+	async navegaToLogin() {
 		try {
 			const url = process.env.URL_NEGOTIATOR;
 			if (!url) {
@@ -36,7 +36,7 @@ export class LoginPage {
 	// Método unificado para login
 	async login(email?: string, password?: string) {
 		try {
-			await this.navegateToLogin();
+			await this.navegaToLogin();
 			await this.fillEmail(email);
 			await this.fillPassword(password);
 			await this.clickLogin();

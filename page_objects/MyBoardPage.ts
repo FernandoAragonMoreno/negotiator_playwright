@@ -5,7 +5,6 @@ export class MyBoardPage extends BasePage {
 	private readonly page: Page;
 	private readonly inventoryDesktopHref: Locator;
 	private readonly inventoryMobileHref: Locator;
-	protected readonly animation: Locator;
 
 	// Siempre que se realice un new MyBoardPage() se ejecutará el constructor
 	// Colocamos Solo la localización de los elementos
@@ -14,7 +13,6 @@ export class MyBoardPage extends BasePage {
 		this.page = page;
 		this.inventoryDesktopHref = page.getByTestId("menu-desktop-Inventario");
 		this.inventoryMobileHref = page.getByTestId("mobile-Inventario-route");
-		this.animation = page.getByTestId("CloseRoundedIcon");
 	}
 
 	// Aca interactuamos con los elementos
