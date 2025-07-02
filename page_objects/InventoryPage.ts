@@ -1,5 +1,6 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
+import { PropertyPage } from "./PropertyPage";
 export class InventoryPage extends BasePage {
 	// Locators
 	private readonly page: Page;
@@ -11,7 +12,7 @@ export class InventoryPage extends BasePage {
 	private readonly searchCityColonyNID: Locator;
 	private readonly foundNID: Locator;
 	private readonly specificCard: Locator;
-	//private readonly nid: Locator;
+	private readonly offer: Locator;
 
 	// Siempre que se realice un new InventoryPage() se ejecutará el constructor
 	// Colocamos Solo la localización de los elementos
@@ -26,7 +27,7 @@ export class InventoryPage extends BasePage {
 		this.searchCityColonyNID = page.getByPlaceholder("Ciudad, Colonia, NID");
 		this.foundNID = page.locator('div[class="sc-ZbTNT dAFDDv"]');
 		this.specificCard = page.locator("div#property-64150");
-		//this.nid = page.getByTestId("customBadge-container").nth(1);
+		this.offer = page.getByRole("button", { name: "Ofertar" });
 	}
 
 	// Aca interactuamos con los elementos
@@ -100,14 +101,15 @@ export class InventoryPage extends BasePage {
 			}
 			const randomIndex = Math.floor(Math.random() * titles.length);
 			const id = await this.card.nth(randomIndex).getAttribute("id");
-			// Extrae solo los dígitos
-			const cardID = id?.match(/\d+/)?.[0];
+			// Reemplaza la cadena "property-" por una cadena vacía.
+			const propertyID = id?.replace("property-", "");
 			console.log(
 				`Seleccionando el título # ${randomIndex + 1}: ${
 					titles[randomIndex]
-				} (card ID: ${cardID})`
+				} (property ID: ${propertyID})`
 			);
 			await this.card.nth(randomIndex).click();
+			return propertyID;
 		} catch (error) {
 			throw new Error(
 				`Error al hacer clic en un título aleatorio: ${error.message}`
@@ -163,22 +165,37 @@ export class InventoryPage extends BasePage {
 		}
 	}
 
-	// Método para verificar el primer modal de chapa electrónica
-	async verifyFirstModalLock() {
+	// Método para verificar la propiedad en una nueva página
+	async verifyProperty(propertyID: string) {
 		try {
 			// Espera a que se abra una nueva página (ventana/modal)
-			const [newPage] = await Promise.all([
-				this.page.context().waitForEvent("page"),
-				// Aquí deberías realizar la acción que abre la nueva ventana/modal
-				await this.clickOnSpecificCard(),
-			]);
+			const newPage = await this.page.context().waitForEvent("page");
 			await newPage.waitForLoadState("load");
-			// Verifica el NID en la nueva página
-			await expect(newPage).toHaveURL(/.*\/propiedad\/64150/);
+			// Verifica el propertyID en la nueva URL
+			await expect(newPage).toHaveURL(new RegExp(`/propiedad/${propertyID}`));
+			const propertyPage = new PropertyPage(newPage);
+			await propertyPage.clickOffer();
+			/*
+			await newPage
+				.getByText("Este inmueble incluye chapa electrónica.")
+				.click();
+			*/
 		} catch (error) {
 			throw new Error(
 				`Error al verificar el primer modal de chapa electrónica: ${error.message}`
 			);
+		}
+	}
+
+	// Método para ofertar en una propiedad
+	async clickOffer() {
+		try {
+			await this.page.waitForLoadState("load");
+			await expect(this.offer).toBeVisible();
+			await expect(this.offer).toBeEnabled();
+			await this.offer.click();
+		} catch (error) {
+			throw new Error(`Error al hacer clic en ofertar: ${error.message}`);
 		}
 	}
 }
