@@ -103,11 +103,6 @@ export class InventoryPage extends BasePage {
 			const id = await this.card.nth(randomIndex).getAttribute("id");
 			// Reemplaza la cadena "property-" por una cadena vacía.
 			const propertyID = id?.replace("property-", "");
-			console.log(
-				`Seleccionando el título # ${randomIndex + 1}: ${
-					titles[randomIndex]
-				} (property ID: ${propertyID})`
-			);
 			await this.card.nth(randomIndex).click();
 			return propertyID;
 		} catch (error) {
@@ -175,15 +170,14 @@ export class InventoryPage extends BasePage {
 			await expect(newPage).toHaveURL(new RegExp(`/propiedad/${propertyID}`));
 			const propertyPage = new PropertyPage(newPage);
 			await propertyPage.clickOffer();
+			return newPage;
 			/*
 			await newPage
 				.getByText("Este inmueble incluye chapa electrónica.")
 				.click();
 			*/
 		} catch (error) {
-			throw new Error(
-				`Error al verificar el primer modal de chapa electrónica: ${error.message}`
-			);
+			throw new Error(`Error al verificar la propiedad: ${error.message}`);
 		}
 	}
 

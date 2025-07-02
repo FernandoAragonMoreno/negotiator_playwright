@@ -2,6 +2,7 @@ import { InventoryPage } from "./../page_objects/InventoryPage";
 import { test } from "@playwright/test";
 import { LoginPage } from "../page_objects/LoginPage";
 import { MyBoardPage } from "../page_objects/MyBoardPage";
+import { NewOfferPage } from "../page_objects/NewOfferPage";
 
 test("negotiator con filtro - Tipo de inventario Habi", async ({ page }) => {
 	// LoginPage
@@ -19,9 +20,18 @@ test("negotiator con filtro - Tipo de inventario Habi", async ({ page }) => {
 	await inventoryPage.clickFilter();
 	await inventoryPage.selectHabi();
 	await inventoryPage.clickShowResults();
-	await inventoryPage.listTitles();
+	//await inventoryPage.listTitles();
 	const propertyID = await inventoryPage.clickRandomCard();
-	await inventoryPage.verifyProperty(propertyID!);
+	// Llamas al método y guardas el valor retornado (la nueva página) en la variable newPage
+	const newPage = await inventoryPage.verifyProperty(propertyID!);
+
+	// NewOffer
+	const newOfferPage = new NewOfferPage(newPage);
+	await newOfferPage.closeAnimation();
+	await newOfferPage.randomPaymentMethod();
+	await newOfferPage.selectExemptionCode();
+	await newOfferPage.fillAddIndividualBuyer();
+	await newOfferPage.clickContinueButton();
 });
 
 /*
