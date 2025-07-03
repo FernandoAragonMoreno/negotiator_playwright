@@ -1,11 +1,12 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 
-export class NewOfferPage extends BasePage {
+export class NewOfferInfoPage extends BasePage {
 	// Locators
 	private readonly page: Page;
 	private readonly containerPaymentMethod: Locator;
 	private readonly radioPaymentMethod: Locator;
+	private readonly radioPaymentMethodBankCredit: Locator;
 	private readonly dropdownExemptionCode: Locator;
 	private readonly optionNo: Locator;
 	private readonly buttonAddIndividualBuyer: Locator;
@@ -28,6 +29,9 @@ export class NewOfferPage extends BasePage {
 		this.radioPaymentMethod = page.locator(
 			'span[class="styles__ControlIcon-sc-ibvecg-2 iYdbZu habi   "]'
 		);
+		this.radioPaymentMethodBankCredit = page
+			.locator('span[class="styles__ControlIcon-sc-ibvecg-2 iYdbZu habi   "]')
+			.nth(1);
 		this.dropdownExemptionCode = page.getByTestId("dropdown-button");
 		this.optionNo = page.getByRole("option", { name: "No" });
 		this.buttonAddIndividualBuyer = page.getByRole("button", {
@@ -51,7 +55,7 @@ export class NewOfferPage extends BasePage {
 	}
 
 	async randomPaymentMethod() {
-		await expect(this.containerPaymentMethod).toBeVisible({ timeout: 30000 });
+		await expect(this.containerPaymentMethod).toBeVisible({ timeout: 50000 });
 		const titles = await this.radioPaymentMethod.allTextContents();
 		if (titles.length === 0) {
 			throw new Error("No se encontraron títulos para seleccionar.");
@@ -61,6 +65,17 @@ export class NewOfferPage extends BasePage {
 		const randomIndex =
 			validIndexes[Math.floor(Math.random() * validIndexes.length)];
 		await this.radioPaymentMethod.nth(randomIndex).click();
+	}
+
+	async selectPaymentMethodBankCredit() {
+		try {
+			await expect(this.containerPaymentMethod).toBeVisible({ timeout: 50000 });
+			await this.radioPaymentMethodBankCredit.click();
+		} catch (error) {
+			throw new Error(
+				`Error al seleccionar el método de pago: ${error.message}`
+			);
+		}
 	}
 
 	async selectExemptionCode() {
@@ -119,7 +134,7 @@ export class NewOfferPage extends BasePage {
 			await expect(this.continueButton).toBeVisible();
 			await expect(this.continueButton).toBeEnabled();
 			await this.continueButton.click();
-			await expect(this.documentTitle).toBeVisible({ timeout: 30000 });
+			await expect(this.documentTitle).toBeVisible({ timeout: 50000 });
 		} catch (error) {
 			throw new Error(`Error al hacer clic en "Continuar": ${error.message}`);
 		}

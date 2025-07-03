@@ -23,11 +23,6 @@ export class MyBoardPage extends BasePage {
 			const inventory = isDesktopVisible
 				? this.inventoryDesktopHref
 				: this.inventoryMobileHref;
-			console.log(
-				`Haciendo clic en el inventario: ${
-					isDesktopVisible ? "Desktop" : "Mobile"
-				}`
-			);
 			await expect(inventory).toBeVisible();
 			await expect(inventory).toBeEnabled();
 			await inventory.click();

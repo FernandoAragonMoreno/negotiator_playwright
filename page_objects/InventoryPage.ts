@@ -165,7 +165,9 @@ export class InventoryPage extends BasePage {
 		try {
 			// Espera a que se abra una nueva página (ventana/modal)
 			const newPage = await this.page.context().waitForEvent("page");
-			await newPage.waitForLoadState("load");
+			await expect(
+				newPage.getByRole("button", { name: "Ofertar" })
+			).toBeVisible({ timeout: 50000 });
 			// Verifica el propertyID en la nueva URL
 			await expect(newPage).toHaveURL(new RegExp(`/propiedad/${propertyID}`));
 			const propertyPage = new PropertyPage(newPage);
