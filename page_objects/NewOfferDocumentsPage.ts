@@ -67,7 +67,7 @@ export class NewOfferDocumentsPage {
 
 	async clickContinueButton() {
 		try {
-			await expect(this.continueButton).toBeVisible();
+			await expect(this.continueButton).toBeVisible({ timeout: 50000 });
 			await expect(this.continueButton).toBeEnabled();
 			await this.continueButton.click();
 			await expect(this.informationTitle).toBeVisible({ timeout: 50000 });

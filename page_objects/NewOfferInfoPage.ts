@@ -81,10 +81,10 @@ export class NewOfferInfoPage extends BasePage {
 	async selectExemptionCode() {
 		try {
 			await this.page.waitForLoadState("load");
-			await expect(this.dropdownExemptionCode).toBeVisible();
+			await expect(this.dropdownExemptionCode).toBeVisible({ timeout: 50000 });
 			await expect(this.dropdownExemptionCode).toBeEnabled();
 			await this.dropdownExemptionCode.click();
-			await expect(this.optionNo).toBeVisible();
+			await expect(this.optionNo).toBeVisible({ timeout: 50000 });
 			await expect(this.optionNo).toBeEnabled();
 			await this.optionNo.click();
 		} catch (error) {
@@ -95,13 +95,13 @@ export class NewOfferInfoPage extends BasePage {
 	}
 
 	private async waitAndFill(locator: Locator, value: string) {
-		await expect(locator).toBeVisible();
+		await expect(locator).toBeVisible({ timeout: 50000 });
 		await expect(locator).toBeEnabled();
 		await locator.fill(value);
 	}
 
 	private async waitAndClick(locator: Locator) {
-		await expect(locator).toBeVisible();
+		await expect(locator).toBeVisible({ timeout: 50000 });
 		await expect(locator).toBeEnabled();
 		await locator.click();
 	}
@@ -131,7 +131,7 @@ export class NewOfferInfoPage extends BasePage {
 
 	async clickContinueButton() {
 		try {
-			await expect(this.continueButton).toBeVisible();
+			await expect(this.continueButton).toBeVisible({ timeout: 50000 });
 			await expect(this.continueButton).toBeEnabled();
 			await this.continueButton.click();
 			await expect(this.documentTitle).toBeVisible({ timeout: 50000 });

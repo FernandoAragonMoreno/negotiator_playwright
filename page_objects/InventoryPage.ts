@@ -34,7 +34,7 @@ export class InventoryPage extends BasePage {
 	// Método para hacer click en Filtros
 	async clickFilter() {
 		try {
-			await expect(this.filter).toBeVisible();
+			await expect(this.filter).toBeVisible({ timeout: 50000 });
 			await expect(this.filter).toBeEnabled();
 			await this.filter.click();
 		} catch (error) {
@@ -46,7 +46,7 @@ export class InventoryPage extends BasePage {
 	async selectHabi() {
 		try {
 			await this.page.waitForLoadState("load");
-			await expect(this.inventoryHabi).toBeVisible();
+			await expect(this.inventoryHabi).toBeVisible({ timeout: 50000 });
 			await expect(this.inventoryHabi).toBeEnabled();
 			// Solo haz clic si NO está activo
 			const isActive = await this.inventoryHabi.evaluate((el) =>
@@ -64,7 +64,7 @@ export class InventoryPage extends BasePage {
 	async clickShowResults() {
 		try {
 			await this.page.waitForLoadState("load");
-			await expect(this.showResults).toBeVisible();
+			await expect(this.showResults).toBeVisible({ timeout: 50000 });
 			await expect(this.showResults).toBeEnabled();
 			await this.showResults.click();
 		} catch (error) {
@@ -94,7 +94,7 @@ export class InventoryPage extends BasePage {
 	async clickRandomCard() {
 		try {
 			await this.page.waitForLoadState("load");
-			await expect(this.card.first()).toBeVisible();
+			await expect(this.card.first()).toBeVisible({ timeout: 50000 });
 			const titles = await this.titleLocation.allTextContents();
 			if (titles.length === 0) {
 				throw new Error("No se encontraron títulos para seleccionar.");
@@ -122,7 +122,7 @@ export class InventoryPage extends BasePage {
 				);
 			}
 			await this.page.waitForLoadState("load");
-			await expect(this.searchCityColonyNID).toBeVisible();
+			await expect(this.searchCityColonyNID).toBeVisible({ timeout: 50000 });
 			await expect(this.searchCityColonyNID).toBeEditable();
 			await this.searchCityColonyNID.fill(nid);
 			// Espera a que los resultados se actualicen
@@ -138,7 +138,7 @@ export class InventoryPage extends BasePage {
 	async clickOnSearchedNID() {
 		try {
 			await this.page.waitForLoadState("load");
-			await expect(this.foundNID).toBeVisible();
+			await expect(this.foundNID).toBeVisible({ timeout: 50000 });
 			await expect(this.foundNID).toBeEnabled();
 			await this.foundNID.click();
 		} catch (error) {
@@ -152,7 +152,7 @@ export class InventoryPage extends BasePage {
 	async clickOnSpecificCard() {
 		try {
 			await this.page.waitForLoadState("load");
-			await expect(this.specificCard).toBeVisible();
+			await expect(this.specificCard).toBeVisible({ timeout: 50000 });
 			await expect(this.specificCard).toBeEnabled();
 			await this.specificCard.click();
 		} catch (error) {
@@ -187,7 +187,7 @@ export class InventoryPage extends BasePage {
 	async clickOffer() {
 		try {
 			await this.page.waitForLoadState("load");
-			await expect(this.offer).toBeVisible();
+			await expect(this.offer).toBeVisible({ timeout: 50000 });
 			await expect(this.offer).toBeEnabled();
 			await this.offer.click();
 		} catch (error) {

@@ -4,6 +4,7 @@ import { LoginPage } from "../page_objects/LoginPage";
 import { MyBoardPage } from "../page_objects/MyBoardPage";
 import { NewOfferInfoPage } from "../page_objects/NewOfferInfoPage";
 import { NewOfferDocumentsPage } from "../page_objects/NewOfferDocumentsPage";
+import { NewOfferInformationPage } from "../page_objects/NewOfferInformationPage";
 
 test("negotiator con filtro - Tipo de inventario Habi", async ({ page }) => {
 	// LoginPage
@@ -37,6 +38,10 @@ test("negotiator con filtro - Tipo de inventario Habi", async ({ page }) => {
 	const newOfferDocumentsPage = new NewOfferDocumentsPage(newPage);
 	await newOfferDocumentsPage.addDocuments();
 	await newOfferDocumentsPage.clickContinueButton();
+
+	// NewOfferInformationPage
+	const newOfferInformationPage = new NewOfferInformationPage(newPage);
+	await newOfferInformationPage.fillInformation();
 });
 
 /*

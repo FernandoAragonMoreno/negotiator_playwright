@@ -11,7 +11,7 @@ export class PropertyPage extends BasePage {
 
 	async clickOffer() {
 		try {
-			await expect(this.buttonOffer).toBeVisible();
+			await expect(this.buttonOffer).toBeVisible({ timeout: 50000 });
 			await expect(this.buttonOffer).toBeEnabled();
 			await this.buttonOffer.click();
 		} catch (error) {

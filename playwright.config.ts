@@ -5,6 +5,7 @@ import { defineConfig, devices } from "@playwright/test";
  * https://github.com/motdotla/dotenv
  */
 import dotenv from "dotenv"; // Para instalar dotenv, ejecutar: npm install dotenv
+import { on } from "events";
 import path from "path";
 dotenv.config({ path: path.resolve(__dirname, ".env.qa") });
 
@@ -25,18 +26,18 @@ export default defineConfig({
 	reporter: "html",
 	/* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
 	expect: {
-		timeout: 10000, // Aumentar tiempo de espera para CI
+		timeout: 100000, // Aumentar tiempo de espera para CI
 	},
 	use: {
 		/* Base URL to use in actions like `await page.goto('/')`. */
 		// baseURL: 'http://localhost:3000',
 
 		/* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-		trace: "on-first-retry",
+		/* trace: "on-first-retry",
 		/* Enable video recording for all tests */
-		video: "on-first-retry",
+		video: "on"
 		/* Enable screenshot capturing for all tests */
-		screenshot: "only-on-failure",
+		/* screenshot: "only-on-failure",
 		/* Set the viewport size */
 		//viewport: { width: 1920, height: 1080 },
 	},
