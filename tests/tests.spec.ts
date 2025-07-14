@@ -36,12 +36,26 @@ test("negotiator con filtro - Tipo de inventario Habi", async ({ page }) => {
 
 	// NewOfferDocuments
 	const newOfferDocumentsPage = new NewOfferDocumentsPage(newPage);
-	await newOfferDocumentsPage.addDocuments();
+	await newOfferDocumentsPage.addID();
+	await newOfferDocumentsPage.addCURP();
+	await newOfferDocumentsPage.addRFC();
+	await newOfferDocumentsPage.addBirthCertificate();
+	await newOfferDocumentsPage.addAddress();
+	await newOfferDocumentsPage.addBankAuthorization();
 	await newOfferDocumentsPage.clickContinueButton();
 
 	// NewOfferInformationPage
 	const newOfferInformationPage = new NewOfferInformationPage(newPage);
-	await newOfferInformationPage.fillInformation();
+	await newOfferInformationPage.fillRFC();
+	await newOfferInformationPage.fillCURP();
+	await newOfferInformationPage.fillNumberID();
+	await newOfferInformationPage.fillDocumentIssuingAuthority();
+	await newOfferInformationPage.fillCellPhoneNumber();
+	await newOfferInformationPage.fillConfirmCellPhoneNumber();
+	await newOfferInformationPage.fillCustomerEmail();
+	await newOfferInformationPage.fillZipCode();
+	await newOfferInformationPage.clickMunicipality();
+	await newOfferInformationPage.selectRandomMunicipality();
 });
 
 /*

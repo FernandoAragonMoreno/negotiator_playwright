@@ -14,7 +14,7 @@ export class BasePage {
 	// Método para cerrar la animación de carga
 	async closeAnimation() {
 		try {
-			await this.animation.waitFor({ state: "visible" });
+			await this.animation.waitFor({ state: "visible", timeout: 60000 });
 			await this.animation.click();
 			await this.animation.waitFor({ state: "hidden" });
 		} catch (error) {

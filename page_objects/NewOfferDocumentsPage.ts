@@ -38,7 +38,7 @@ export class NewOfferDocumentsPage {
 		this.informationTitle = page.locator('p[class="information__title"]');
 	}
 
-	async addDocuments() {
+	async addID() {
 		try {
 			const file = process.env.PDF;
 			if (!file) {
@@ -46,22 +46,81 @@ export class NewOfferDocumentsPage {
 			}
 			await this.uploadID.setInputFiles(file);
 			await expect(this.attachedID).toBeVisible({ timeout: 50000 });
+		} catch (error) {
+			throw new Error(`Error al adjuntar el ID: ${error.message}`);
+		}
+	}
+
+	async addCURP() {
+		try {
+			const file = process.env.PDF;
+			if (!file) {
+				throw new Error("La variable de entorno PDF no está definida.");
+			}
 			await this.uploadCURP.setInputFiles(file);
 			await expect(this.attachedCURP).toBeVisible({ timeout: 50000 });
+		} catch (error) {
+			throw new Error(`Error al adjuntar el CURP: ${error.message}`);
+		}
+	}
+
+	async addRFC() {
+		try {
+			const file = process.env.PDF;
+			if (!file) {
+				throw new Error("La variable de entorno PDF no está definida.");
+			}
 			await this.uploadRFC.setInputFiles(file);
 			await expect(this.attachedRFC).toBeVisible({ timeout: 50000 });
+		} catch (error) {
+			throw new Error(`Error al adjuntar el RFC: ${error.message}`);
+		}
+	}
+
+	async addBirthCertificate() {
+		try {
+			const file = process.env.PDF;
+			if (!file) {
+				throw new Error("La variable de entorno PDF no está definida.");
+			}
 			await this.uploadBirthCertificate.setInputFiles(file);
 			await expect(this.attachedBirthCertificate).toBeVisible({
 				timeout: 50000,
 			});
+		} catch (error) {
+			throw new Error(
+				`Error al adjuntar el certificado de nacimiento: ${error.message}`
+			);
+		}
+	}
+
+	async addAddress() {
+		try {
+			const file = process.env.PDF;
+			if (!file) {
+				throw new Error("La variable de entorno PDF no está definida.");
+			}
 			await this.uploadAddress.setInputFiles(file);
 			await expect(this.attachedAddress).toBeVisible({ timeout: 50000 });
+		} catch (error) {
+			throw new Error(`Error al adjuntar la dirección: ${error.message}`);
+		}
+	}
+
+	async addBankAuthorization() {
+		try {
+			const file = process.env.PDF;
+			if (!file) {
+				throw new Error("La variable de entorno PDF no está definida.");
+			}
 			await this.uploadBankAuthorization.setInputFiles(file);
 			await expect(this.attachedBankAuthorization).toBeVisible({
 				timeout: 50000,
 			});
 		} catch (error) {
-			throw new Error(`Error al adjuntar el documento: ${error.message}`);
+			throw new Error(
+				`Error al adjuntar la autorización bancaria: ${error.message}`
+			);
 		}
 	}
 

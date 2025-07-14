@@ -58,70 +58,153 @@ export class NewOfferInformationPage {
 		return result;
 	}
 
-	async fillInformation() {
+	async fillRFC() {
 		try {
 			const rfc = process.env.RFC;
 			if (!rfc) {
 				throw new Error("La variable de entorno RFC no está definida.");
 			}
 			await this.inputRFC.fill(rfc);
+		} catch (error) {
+			throw new Error(`Error al llenar el RFC: ${error.message}`);
+		}
+	}
 
+	async fillCURP() {
+		try {
 			const curp = process.env.CURP;
 			if (!curp) {
 				throw new Error("La variable de entorno CURP no está definida.");
 			}
 			await this.inputCURP.fill(curp);
+		} catch (error) {
+			throw new Error(`Error al llenar el CURP: ${error.message}`);
+		}
+	}
 
+	async fillNumberID() {
+		try {
 			const randomNumberID = this.generateRandomNumberID();
 			await this.inputID.fill(randomNumberID);
+		} catch (error) {
+			throw new Error(
+				`Error al llenar el número de identificación: ${error.message}`
+			);
+		}
+	}
 
+	async fillDocumentIssuingAuthority() {
+		try {
 			await this.dropdownDocumentIssuingAuthority.click();
 			await this.OptionINE.click();
+		} catch (error) {
+			throw new Error(
+				`Error al seleccionar la autoridad emisora del documento: ${error.message}`
+			);
+		}
+	}
 
+	async fillCellPhoneNumber() {
+		try {
 			const cellphone = process.env.CellPhoneNumber;
 			if (!cellphone) {
 				throw new Error(
 					"La variable de entorno CellPhoneNumber no está definida."
 				);
 			}
+
 			await expect(this.inputCellPhoneNumber).toBeVisible({ timeout: 50000 });
 			await expect(this.inputCellPhoneNumber).toBeEnabled();
 			await this.inputCellPhoneNumber.fill(cellphone);
 
+			// Verificar que el campo contiene los dígitos del número (ignorando formato)
+			const actualValue = await this.inputCellPhoneNumber.inputValue();
+			const digitsOnly = cellphone.replace(/\D/g, ""); // Solo dígitos del input
+			expect(actualValue).toContain(digitsOnly);
+		} catch (error) {
+			throw new Error(`Error al llenar el número de celular: ${error.message}`);
+		}
+	}
+
+	async fillConfirmCellPhoneNumber() {
+		try {
+			const cellphone = process.env.CellPhoneNumber;
+			if (!cellphone) {
+				throw new Error(
+					"La variable de entorno CellPhoneNumber no está definida."
+				);
+			}
+			// Validación campo de confirmación
 			await expect(this.inputConfirmCellPhoneNumber).toBeVisible({
 				timeout: 50000,
 			});
 			await expect(this.inputConfirmCellPhoneNumber).toBeEnabled();
+			await expect(this.inputConfirmCellPhoneNumber).toBeEditable();
 			await this.inputConfirmCellPhoneNumber.fill(cellphone);
 
+			// Verificar que el valor se ingresó correctamente
+			await expect(this.inputConfirmCellPhoneNumber).toHaveValue(cellphone);
+		} catch (error) {
+			throw new Error(`Error al llenar el número de celular: ${error.message}`);
+		}
+	}
+
+	async fillCustomerEmail() {
+		try {
 			const email = process.env.CustomerEmail;
 			if (!email) {
 				throw new Error(
 					"La variable de entorno CustomerEmail no está definida."
 				);
 			}
+			await expect(this.inputEmail).toBeVisible({ timeout: 50000 });
+			await expect(this.inputEmail).toBeEnabled();
 			await this.inputEmail.fill(email);
+			await expect(this.inputConfirmEmail).toBeVisible({ timeout: 50000 });
+			await expect(this.inputConfirmEmail).toBeEnabled();
 			await this.inputConfirmEmail.fill(email);
+		} catch (error) {
+			throw new Error(
+				`Error al llenar el correo electrónico: ${error.message}`
+			);
+		}
+	}
 
+	async fillZipCode() {
+		try {
+			await expect(this.inputZipCode).toBeVisible({ timeout: 50000 });
+			await expect(this.inputZipCode).toBeEnabled();
 			const zipCode = this.generateRandomZipCode();
 			await this.inputZipCode.fill(zipCode);
+		} catch (error) {
+			throw new Error(`Error al llenar el código postal: ${error.message}`);
+		}
+	}
 
+	async clickMunicipality() {
+		try {
 			await expect(this.dropdownMunicipality).toBeVisible({ timeout: 50000 });
 			await this.dropdownMunicipality.click();
-
-			// Obtener todos los elementos <li> que contienen municipios (excluyendo el primero que es "Selecciona el municipio")
-			const municipios = Array.from(document.querySelectorAll("li[data-value]"))
-				.filter((li) => li.getAttribute("data-value") !== "")
-				.map((li) => li.getAttribute("data-value"));
-
-			// Seleccionar un municipio al azar
-			const municipioAleatorio =
-				municipios[Math.floor(Math.random() * municipios.length)];
-
-			// Imprimir el municipio seleccionado
-			console.log(municipioAleatorio);
 		} catch (error) {
 			throw new Error(`Error al llenar la información: ${error.message}`);
+		}
+	}
+
+	async selectRandomMunicipality() {
+		try {
+			// Ejecuta código en el contexto de la página del navegador
+			const municipioAleatorio = await this.page.evaluate(() => {
+				const municipios = Array.from(
+					document.querySelectorAll("li[data-value]")
+				)
+					.filter((li) => li.getAttribute("data-value") !== "")
+					.map((li) => li.getAttribute("data-value"));
+
+				return municipios[Math.floor(Math.random() * municipios.length)];
+			});
+			await this.page.locator(`li[data-value="${municipioAleatorio}"]`).click();
+		} catch (error) {
+			throw new Error(`Error al seleccionar municipio: ${error.message}`);
 		}
 	}
 }
