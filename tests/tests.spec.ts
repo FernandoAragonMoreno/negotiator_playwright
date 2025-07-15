@@ -56,6 +56,22 @@ test("negotiator con filtro - Tipo de inventario Habi", async ({ page }) => {
 	await newOfferInformationPage.fillZipCode();
 	await newOfferInformationPage.clickMunicipality();
 	await newOfferInformationPage.selectRandomMunicipality();
+	await newOfferInformationPage.fillColony();
+	await newOfferInformationPage.fillCityResidence();
+	await newOfferInformationPage.fillHome();
+	await newOfferInformationPage.clickNationality();
+	await newOfferInformationPage.selectRandomNationality();
+	await newOfferInformationPage.clickCountryBirth();
+	await newOfferInformationPage.selectRandomCountryBirth();
+	await newOfferInformationPage.clickCountryResidence();
+	await newOfferInformationPage.selectRandomCountryResidence();
+	await newOfferInformationPage.clickState();
+	await newOfferInformationPage.selectRandomState();
+	await newOfferInformationPage.clickPayrollReceipt();
+	await newOfferInformationPage.selectRandomPayrollReceipt();
+	await newOfferInformationPage.clickOccupation();
+	await newOfferInformationPage.selectRandomOccupation();
+	await newOfferInformationPage.fillCreditAmount();
 });
 
 /*
