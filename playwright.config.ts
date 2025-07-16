@@ -5,7 +5,6 @@ import { defineConfig, devices } from "@playwright/test";
  * https://github.com/motdotla/dotenv
  */
 import dotenv from "dotenv"; // Para instalar dotenv, ejecutar: npm install dotenv
-import { on } from "events";
 import path from "path";
 dotenv.config({ path: path.resolve(__dirname, ".env.qa") });
 
@@ -36,7 +35,7 @@ export default defineConfig({
 		/* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
 		/* trace: "on-first-retry",
 		/* Enable video recording for all tests */
-		video: "on"
+		video: "on",
 		/* Enable screenshot capturing for all tests */
 		/* screenshot: "only-on-failure",
 		/* Set the viewport size */
