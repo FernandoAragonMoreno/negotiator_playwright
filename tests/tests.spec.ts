@@ -1,11 +1,11 @@
-import { InventoryPage } from "../brokersmx_page_objects/InventoryPage";
 import { expect, test } from "@playwright/test";
-import { LoginPage } from "../brokersmx_page_objects/LoginPage";
-import { MyBoardPage } from "../brokersmx_page_objects/MyBoardPage";
-import { NewOfferInfoPage } from "../brokersmx_page_objects/NewOfferInfoPage";
-import { NewOfferDocumentsPage } from "../brokersmx_page_objects/NewOfferDocumentsPage";
-import { NewOfferInformationPage } from "../brokersmx_page_objects/NewOfferInformationPage";
+import { LoginPage } from "../page_objects/brokersmx/LoginPage";
+import { NewOfferDocumentsPage } from "../page_objects/brokersmx/NewOfferDocumentsPage";
+import { NewOfferInformationPage } from "../page_objects/brokersmx/NewOfferInformationPage";
 import { BusinessRepository } from "../repositories/BusinessRepository";
+import { InventoryPage } from "../page_objects/brokersmx/InventoryPage";
+import { MyBoardPage } from "../page_objects/brokersmx/MyBoardPage";
+import { NewOfferInfoPage } from "../page_objects/brokersmx/NewOfferInfoPage";
 
 test("negotiator con filtro - Tipo de inventario Habi", async ({ page }) => {
 	// LoginPage

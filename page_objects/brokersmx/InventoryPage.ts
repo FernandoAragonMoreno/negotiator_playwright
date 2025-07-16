@@ -1,6 +1,7 @@
 import { expect, Locator, Page } from "@playwright/test";
-import { BasePage } from "./BasePage";
 import { PropertyPage } from "./PropertyPage";
+import { BasePage } from "./BasePage";
+
 export class InventoryPage extends BasePage {
 	// Locators
 	private readonly page: Page;
