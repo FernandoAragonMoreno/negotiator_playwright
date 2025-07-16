@@ -1,10 +1,10 @@
-import { InventoryPage } from "./../page_objects/InventoryPage";
+import { InventoryPage } from "../brokersmx_page_objects/InventoryPage";
 import { expect, test } from "@playwright/test";
-import { LoginPage } from "../page_objects/LoginPage";
-import { MyBoardPage } from "../page_objects/MyBoardPage";
-import { NewOfferInfoPage } from "../page_objects/NewOfferInfoPage";
-import { NewOfferDocumentsPage } from "../page_objects/NewOfferDocumentsPage";
-import { NewOfferInformationPage } from "../page_objects/NewOfferInformationPage";
+import { LoginPage } from "../brokersmx_page_objects/LoginPage";
+import { MyBoardPage } from "../brokersmx_page_objects/MyBoardPage";
+import { NewOfferInfoPage } from "../brokersmx_page_objects/NewOfferInfoPage";
+import { NewOfferDocumentsPage } from "../brokersmx_page_objects/NewOfferDocumentsPage";
+import { NewOfferInformationPage } from "../brokersmx_page_objects/NewOfferInformationPage";
 import { BusinessRepository } from "../repositories/BusinessRepository";
 
 test("negotiator con filtro - Tipo de inventario Habi", async ({ page }) => {
@@ -26,6 +26,7 @@ test("negotiator con filtro - Tipo de inventario Habi", async ({ page }) => {
 	const propertyID = await inventoryPage.clickRandomCard();
 	// Llamas al método y guardas el valor retornado (la nueva página) en la variable newPage
 	const newPage = await inventoryPage.verifyProperty(propertyID!);
+	console.log(`🏠 Property ID seleccionado: ${propertyID}`);
 
 	// NewOfferInfo
 	const newOfferInfoPage = new NewOfferInfoPage(newPage);
@@ -73,6 +74,35 @@ test("negotiator con filtro - Tipo de inventario Habi", async ({ page }) => {
 	await newOfferInformationPage.clickOccupation();
 	await newOfferInformationPage.selectRandomOccupation();
 	await newOfferInformationPage.fillCreditAmount();
+	await newOfferInformationPage.clickOfferButton();
+	await newOfferInformationPage.clickUnderstoodButton();
+
+	// BusinessRepository
+	await page.waitForTimeout(10000);
+	const businessRepository = new BusinessRepository();
+	// Ejecutar la consulta
+	const cards = await businessRepository.getOfferReviewCards(propertyID!);
+	// Validaciones básicas
+	expect(Array.isArray(cards)).toBe(true);
+	if (cards.length > 0) {
+		console.log(
+			`✅ Se encontraron ${cards.length} cards para property ID: ${propertyID}`
+		);
+		// Mostrar todas las cards encontradas
+		cards.forEach((card, index) => {
+			console.log(`Card ${index + 1}:`, {
+				pipefy_card_id: card.pipefy_card_id,
+				broker_id: card.broker_id,
+				property_id: card.property_id,
+				status: card.status,
+			});
+		});
+	} else {
+		console.log("⚠️ No se encontraron cards con los criterios especificados");
+		console.log(
+			`Criterios: broker_id=269, property_id=${propertyID}, status=offer_review`
+		);
+	}
 });
 
 /*
@@ -97,12 +127,13 @@ test("negotiator por NID", async ({ page }) => {
 });
 */
 
+/*
 test("Consulta de business cards", async () => {
 	// Crear instancia del repositorio
-	const businessRepo = new BusinessRepository();
+	const businessRepository = new BusinessRepository();
 
 	// Ejecutar la consulta
-	const cards = await businessRepo.getOfferReviewCards();
+	const cards = await businessRepository.getOfferReviewCards(propertyID);
 
 	// Validaciones básicas
 	expect(Array.isArray(cards)).toBe(true);
@@ -139,3 +170,5 @@ test("Consulta de business cards", async () => {
 		);
 	}
 });
+
+*/

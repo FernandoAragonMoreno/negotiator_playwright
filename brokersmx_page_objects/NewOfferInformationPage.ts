@@ -24,6 +24,9 @@ export class NewOfferInformationPage {
 	private readonly dropdownPayrollReceipt: Locator;
 	private readonly dropdownOccupation: Locator;
 	private readonly inputCredit: Locator;
+	private readonly buttonOffer: Locator;
+	private readonly offerReceivedMessage: Locator;
+	private readonly understoodButton: Locator;
 
 	constructor(page: Page) {
 		this.page = page;
@@ -66,6 +69,11 @@ export class NewOfferInformationPage {
 		this.inputCredit = page.getByPlaceholder(
 			"Monto crédito bancario autorizado"
 		);
+		this.buttonOffer = page.getByRole("button", { name: "Ofertar" });
+		this.offerReceivedMessage = page.locator(
+			"div.wrapper__offer-titles > p.wrapper__offer__titles-title"
+		);
+		this.understoodButton = page.getByRole("button", { name: "Entendido" });
 	}
 
 	private generateRandomNumberID(): string {
@@ -557,6 +565,35 @@ export class NewOfferInformationPage {
 			await this.inputCredit.fill(randomCreditAmount);
 		} catch (error) {
 			throw new Error(`Error al llenar el monto de crédito: ${error.message}`);
+		}
+	}
+
+	async clickOfferButton() {
+		try {
+			await this.page.keyboard.press("Tab");
+			await expect(this.buttonOffer).toBeVisible({ timeout: 50000 });
+			await expect(this.buttonOffer).toBeEnabled();
+			await this.buttonOffer.click();
+		} catch (error) {
+			throw new Error(
+				`Error al hacer clic en el botón de ofertar: ${error.message}`
+			);
+		}
+	}
+
+	async clickUnderstoodButton() {
+		try {
+			await expect(this.offerReceivedMessage).toBeVisible({ timeout: 50000 });
+			await expect(this.offerReceivedMessage).toHaveText(
+				"¡Tu oferta será revisada de forma inmediata!"
+			);
+			await expect(this.understoodButton).toBeVisible({ timeout: 50000 });
+			await expect(this.understoodButton).toBeEnabled();
+			await this.understoodButton.click();
+		} catch (error) {
+			throw new Error(
+				`Error al hacer clic en el botón entendido: ${error.message}`
+			);
 		}
 	}
 }

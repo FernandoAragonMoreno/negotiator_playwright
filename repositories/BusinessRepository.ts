@@ -1,9 +1,9 @@
 import { query } from "../db";
 
 export class BusinessRepository {
-	async getOfferReviewCards() {
+	async getOfferReviewCards(propertyID: string) {
 		const sqlQuery = `
-            SELECT b.*
+            SELECT b.pipefy_card_id, b.broker_id, b.status, pc.property_id
             FROM habi_brokers_business.business b
             LEFT JOIN habi_brokers_listing.property_card pc
                 ON b.property_card_id = pc.id
@@ -13,7 +13,7 @@ export class BusinessRepository {
             AND b.status LIKE ?
         `;
 
-		const values = [269, 64149, "offer_review"];
+		const values = [269, propertyID, "offer_review"];
 
 		try {
 			const result = await query(sqlQuery, values);
